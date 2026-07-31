@@ -21,7 +21,7 @@ def intersection_cartesian(L1: pd.DataFrame, L2: pd.DataFrame):
 
 
 
-def points2lines(p1,p2):
+def points_to_lines(p1,p2):
     p1 = np.array(p1)
     p2 = np.array(p2)
 
