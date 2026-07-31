@@ -43,10 +43,59 @@ def points_to_lines(p1,p2):
     return pd.DataFrame([a,b,c], index=["A", "B", "C"]).T
 
 
+def find_y_on_lines(lines: np.array, x: np.array):
+    if len(lines) == 0:
+        return lines
+    lines = np.array(lines)
+    if lines.dtype == np.object_:
+        raise ValueError("lines should be matriz alike")
+    elif len(lines.shape) ==1:
+        if len(lines) == 2:
+            lines = lines.reshape(-1, 2)
+        else:
+            raise ValueError("the length of line vector should 2")
+    elif len(lines.shape) == 2:
+        if lines.shape[1] != 2:
+            raise ValueError("lines should be matrix with column size of exactly 2")
+    else:
+        raise ValueError("Invalid lines")
 
 
+    x = np.array(x)
+    if x.dtype == np.object_:
+        raise ValueError("x should be matrix alike")
+
+    rho = lines[:, 1].reshape(-1,1)
+    phi = lines[:, 0].reshape(-1,1)
+    y = (rho - x * np.cos(phi)) / np.sin(phi)
+
+    return y
 
 
-def find_points_on_lines():
+def find_points_on_lines(lines: np.array, x: np.array):
+    if len(lines) == 0:
+        return lines
+
+    lines = np.array(lines)
+    if len(lines.shape) == 1:
+        if len(lines) == 2:
+            lines = lines.reshape(-1, 2)
+
+    x = np.array(x)
+
+    y = find_y_on_lines(lines, x)
+
+    points = list()
+
+    for ix in range(len(x)):
+        points_on_a_line = np.zeros((len(lines), 2))
+        points_on_a_line[:, 0] = x[ix]
+        points_on_a_line[:, 1] = y[:, ix]
+        points.append(list(map(lambda x: tuple(x), points_on_a_line.tolist())))
+
+    return points
+
+
+def interpolate_pixels_along_line():
     pass
 
