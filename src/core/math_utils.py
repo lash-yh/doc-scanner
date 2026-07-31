@@ -29,7 +29,21 @@ def points_to_lines(p1,p2):
         raise ValueError("p1 and p2 should matrix alike")
     elif len(p1.shape) == 2 and len(p2.shape) == 2:
         if p1.shape[1] != 2 or p2.shape[1] != 2:
-            raise ValueError()
+            raise ValueError("p1 and p2 should be a matrix with column size of exactly 2")
+    elif len(p1.shape) == 1 and len(p1) == 2 and len(p1.shape) == 1 and len(p2) == 2:
+        p1 = p1.reshape(-1, 2)
+        p2 = p2.reshape(-1, 2)
+    else:
+        raise ValueError("Invalid p1 and p2")
+
+    a = p1[:, 1] - p2[:, 1]
+    b = p2[:, 0] - p1[:, 1]
+    c = p1[:, 0] * p2[:, 1] - p2[:,0] * p1[:, 1]
+
+    return pd.DataFrame([a,b,c], index=["A", "B", "C"]).T
+
+
+
 
 
 
