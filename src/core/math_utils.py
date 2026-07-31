@@ -7,7 +7,7 @@ import pandas as pd
 
 def intersection_cartesian(L1: pd.DataFrame, L2: pd.DataFrame):
 
-    if not ["A", "B","C"].inssubset(set(L1.columns)) or not ["A","B","C"].inssubset(set(L2.columns)):
+    if not ["A", "B","C"].issubset(set(L1.columns)) or not ["A","B","C"].issubset(set(L2.columns)):
         raise ValueError("L1 and L2 should both contains columns A, B and C, which depicts lines in general form")
 
     d = L1["A"] * L2["B"] - L1["B"] * L2["A"]
