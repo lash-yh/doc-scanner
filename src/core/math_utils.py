@@ -36,7 +36,7 @@ def points_to_lines(p1,p2):
         raise ValueError("Invalid p1 and p2")
 
     a = p1[:, 1] - p2[:, 1]
-    b = p2[:, 0] - p1[:, 1]
+    b = p2[:, 0] - p1[:, 0]
     c = p1[:, 0] * p2[:, 1] - p2[:,0] * p1[:, 1]
 
     return pd.DataFrame([a,b,c], index=["A", "B", "C"]).T
