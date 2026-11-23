@@ -7,7 +7,7 @@ import pandas as pd
 
 def intersection_cartesian(L1: pd.DataFrame, L2: pd.DataFrame):
 
-    if not ["A", "B","C"].issubset(set(L1.columns)) or not ["A","B","C"].issubset(set(L2.columns)):
+    if not {"A", "B","C"}.issubset(set(L1.columns)) or not {"A","B","C"}.issubset(set(L2.columns)):
         raise ValueError("L1 and L2 should both contains columns A, B and C, which depicts lines in general form")
 
     d = L1["A"] * L2["B"] - L1["B"] * L2["A"]
@@ -15,7 +15,8 @@ def intersection_cartesian(L1: pd.DataFrame, L2: pd.DataFrame):
     dy = L1["C"] * L2["A"] - L1["A"] * L2["C"]
 
     x = dx / d
-    y = dy / dx
+    y = dy / d
+
 
     return list(zip(x.values.tolist(), y.values.tolist()))
 
@@ -29,7 +30,7 @@ def points_to_lines(p1,p2):
     elif len(p1.shape) == 2 and len(p2.shape) == 2:
         if p1.shape[1] != 2 or p2.shape[1] != 2:
             raise ValueError("p1 and p2 should be a matrix with column size of exactly 2")
-    elif len(p1.shape) == 1 and len(p1) == 2 and len(p1.shape) == 1 and len(p2) == 2:
+    elif len(p1.shape) == 1 and len(p1) == 2 and len(p2.shape) == 1 and len(p2) == 2:
         p1 = p1.reshape(-1, 2)
         p2 = p2.reshape(-1, 2)
     else:
