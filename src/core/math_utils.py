@@ -43,7 +43,7 @@ def points_to_lines(p1,p2):
     return pd.DataFrame([a,b,c], index=["A", "B", "C"]).T
 
 
-def find_y_on_lines(lines: np.array, x: np.array):
+def find_y_on_lines(lines: np.ndarray, x: np.ndarray):
     if len(lines) == 0:
         return lines
     lines = np.array(lines)
@@ -72,7 +72,9 @@ def find_y_on_lines(lines: np.array, x: np.array):
     return y
 
 
-def find_points_on_lines(lines: np.array, x: np.array):
+def find_points_on_lines(lines: np.ndarray, x: np.ndarray):
+    # Nota: mismo problema que en find_y_on_lines — "np.array" es una función,
+    # no un tipo; debería ser "np.ndarray".
     if len(lines) == 0:
         return lines
 
