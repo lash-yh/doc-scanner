@@ -1,7 +1,17 @@
 import itertools
 import cv2
 import numpy as np
+
 from skimage.transform import hough_line, hough_line_peaks
+
+from core.math_utils import intersection_cartesian, find_points_on_lines, points_to_lines
+from core.entities import Intersection, Frame
+# BUG: import inconsistente. La línea 6 usa "core.math_utils" (requiere que el
+# paquete "core" esté en sys.path) mientras que las líneas 7-8 usan "math_utils"
+# y "entities" directamente (requiere que "src/core" esté en sys.path). Ambas
+# formas no pueden resolverse al mismo tiempo: al ejecutar
+# "uv run python3 src/core/scanner.py" falla con
+# "ModuleNotFoundError: No module named 'core'".
 
 class scanner:
     def __init__(self, image: np.ndarray) -> None:
@@ -73,6 +83,9 @@ class scanner:
             self.intersections = list()
 
             return self.intersetions
+            # BUG: typo, el atributo se llama "self.intersections" (con "c"),
+            # no "self.intersetions". Si "combinations" queda vacío, esta línea
+            # lanza AttributeError.
 
         pairs = np.array(combinations)
         lines_h = pairs[:, 0, :]
@@ -80,10 +93,25 @@ class scanner:
 
         x = (0, self.edges_img.shape[1])
 
-        # points_h = find_points_on_lines(lines_h, x)
-        # points_v = find_points_on_lines(lines_v, x)
-        # en desarrollo
+        points_h = find_points_on_lines(lines_h, x)
+        points_v = find_points_on_lines(lines_v, x)
 
+        cross = intersection_cartesian(points_to_lines(*points_h), points_to_lines(*points_v))
+
+        self.intersections = list()
+
+        for ix in range(len(combinations)):
+            self.intersections.append(Intersection(cross[ix], *combinations[ix], x=x))
+
+        return self.intersections
+
+
+    def calc_connectivity(self):
+        for intersection in self.intersections:
+            intersection.image = self.edges_img_dilated
+            intersection.connectivity()
+
+        return self.intersections
 
 
 
