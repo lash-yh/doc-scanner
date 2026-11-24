@@ -47,7 +47,7 @@ class scanner:
 
 
     def hough_transform(self, err=np.pi * 1 / 12, threshold=0.49, ks=3 ):
-        theta = np.lispace(-np.pi * 1 / 4,np.pi * 3 /4, 180)
+        theta = np.linspace(-np.pi * 1 / 4,np.pi * 3 /4, 180)
         h, theta, distance = hough_line(self.edges_img, theta)
         hits, phi,  rho = hough_line_peaks(
             h, theta, distance, min_distance=10, min_angle=50, threshold=threshold* h.max(), num_peaks=np.inf)
