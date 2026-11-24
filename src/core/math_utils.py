@@ -99,8 +99,10 @@ def find_points_on_lines(lines: np.ndarray, x: np.ndarray):
 
 
 def interpolate_pixels_along_line(
-        p1: Union[np.ndarray, tuple[int, int]], p2: Union[np.ndarray, tuple[int, int]], width: int = 2
+        p1: Union[np.ndarray, tuple[int, int]],
+        p2: Union[np.ndarray, tuple[int, int]], width: int = 2
 ):
+
     if type(p1) is np.ndarray and type(p2) is np.ndarray:
         (x1, y1) = p1.flatten()
         (x2, y2) = p2.flatten()
@@ -155,10 +157,12 @@ def interpolate_pixels_along_line(
 
     for x in np.arange(xpxl0 + 1, xpxl1):
         if steep:
-            pixels.extend([(np.floor(interpolated_y) + i, x) for i in range(1 - width, width + 1)])
+            pixels.extend([(np.floor(interpolated_y) + i, x)
+                           for i in range(1 - width, width + 1)])
 
         else:
-            pixels.extend([(x, np.floor(interpolated_y) + i) for i in range(1 - width, width + 1)])
+            pixels.extend([(x, np.floor(interpolated_y) + i)
+                           for i in range(1 - width, width + 1)])
 
         interpolated_y += gradient
 
@@ -168,7 +172,8 @@ def interpolate_pixels_along_line(
     else:
         pixels.extend([(xpxl1, ypxl1), (xpxl1, ypxl1 + 1)])
 
-    return list(map(lambda x: tuple(x), np.array(pixels, dtype=np.int_)))
+    return list(map(lambda x: tuple(x),
+                    np.array(pixels, dtype=np.int_)))
 
 def _order_points(pts):
     pts = np.array(pts)
@@ -191,14 +196,21 @@ def four_point_transform(image, pts):
 
     (tl, tr, br, bl) = rect
 
-    widthA = np.sqrt(((br[0] - bl[0]) ** 2) + ((br[1] - bl[1]) ** 2))
-    widthB = np.sqrt(((tr[0] - tl[0]) ** 2) + ((tr[1] - tl[1]) ** 2))
+    widthA = np.sqrt(((br[0] - bl[0]) ** 2) +
+                     ((br[1] - bl[1]) ** 2))
+
+    widthB = np.sqrt(((tr[0] - tl[0]) ** 2) +
+                     ((tr[1] - tl[1]) ** 2))
 
     maxWidth = max(int(widthA), int(widthB))
 
 
-    heightA = np.sqrt(((tr[0] - br[0]) ** 2) + ((tr[1] - br[1]) ** 2))
-    heightB = np.sqrt(((tl[0] - bl[0]) ** 2) + ((tl[1] - bl[1]) ** 2))
+    heightA = np.sqrt(((tr[0] - br[0]) ** 2) +
+                      ((tr[1] - br[1]) ** 2))
+
+    heightB = np.sqrt(((tl[0] - bl[0]) ** 2) +
+
+                      ((tl[1] - bl[1]) ** 2))
     maxHeight = max(int(heightA), int(heightB))
 
     dst = np.array([[0,0], [maxWidth -1, 0],
@@ -206,6 +218,8 @@ def four_point_transform(image, pts):
                     [0, maxHeight - 1]], dtype="float32")
 
     M = cv2.getPerspectiveTransform(rect, dst)
-    warped = cv2.warpPerspective(image, M, (maxWidth, maxHeight))
+
+    warped = cv2.warpPerspective(image, M,
+                        (maxWidth, maxHeight))
 
     return warped
